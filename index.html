@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Color Picker – Set Any Material You Theme Color</title>
+  <meta name="description" content="Set any custom Material You theme color on Google Pixel and Android 13–17, not just wallpaper colors. Free, in your browser over USB (WebUSB + ADB). No root, no app install." />
+  <meta name="keywords" content="Pixel custom theme color, Material You custom color, Android dynamic color, Monet, change system accent color, Pixel lock screen clock color, ADB theme, Repainter alternative" />
+  <meta name="theme-color" content="#3b5bdb" />
+  <link rel="canonical" href="https://ok111.github.io/pixel-color-picker/" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Pixel Color Picker" />
+  <meta property="og:title" content="Pixel Color Picker – Any Material You color on your Pixel" />
+  <meta property="og:description" content="Pick any theme color for your Pixel, not just the ones from your wallpaper. Works in Chrome over USB, no root, no app." />
+  <meta property="og:url" content="https://ok111.github.io/pixel-color-picker/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Pixel Color Picker" />
+  <meta name="twitter:description" content="Set any Material You theme color on your Pixel from the browser. No root, no app." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Pixel Color Picker",
+    "url": "https://ok111.github.io/pixel-color-picker/",
+    "description": "Set any custom Material You theme color and lock screen clock color on Google Pixel and Android 13+ from the browser over USB.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Android, Windows, macOS, Linux, ChromeOS",
+    "browserRequirements": "Requires WebUSB (Chrome or Edge on desktop)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Pixel Color Picker</h1>
+      <p class="sub">Set <b>any</b> Material You theme color on your Pixel, not just the ones from your wallpaper. Runs in your browser over USB. No root, no app.</p>
+    </header>
+
+    <section class="card">
+      <div class="row">
+        <button id="connect">Connect phone</button>
+        <button id="disconnect" class="ghost" hidden>Disconnect</button>
+        <span id="device" class="muted">Not connected</span>
+      </div>
+      <p class="hint">
+        First time: enable <b>USB debugging</b>, plug in the phone, and run
+        <code>adb kill-server</code> on the PC (Chrome and adb.exe can't both use the USB connection).
+        Accept the "Allow USB debugging" prompt on the phone.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Color</h2>
+      <div class="row">
+        <input type="color" id="picker" value="#00c853" />
+        <input type="text" id="hex" value="#00C853" maxlength="7" spellcheck="false" />
+        <label class="style">
+          Style
+          <select id="style">
+            <option value="TONAL_SPOT">Tonal spot (Android default)</option>
+            <option value="VIBRANT" selected>Vibrant</option>
+            <option value="EXPRESSIVE">Expressive</option>
+            <option value="RAINBOW">Rainbow</option>
+            <option value="FRUIT_SALAD">Fruit salad</option>
+            <option value="SPRITZ">Spritz (muted)</option>
+            <option value="MONOCHROMATIC">Monochrome</option>
+          </select>
+        </label>
+      </div>
+      <div id="swatches" class="swatches"></div>
+    </section>
+
+    <section class="card">
+      <h2>Preview <span class="muted small">(approximate, uses the same Material algorithm)</span></h2>
+      <div class="previews">
+        <div id="prevLight" class="phone"></div>
+        <div id="prevDark" class="phone"></div>
+      </div>
+      <div id="tones" class="tones"></div>
+    </section>
+
+    <section class="card">
+      <h2>Lock screen clock</h2>
+      <div class="row">
+        <input type="color" id="clockPicker" value="#ff1744" />
+        <input type="text" id="clockHex" value="#FF1744" maxlength="7" spellcheck="false" />
+        <button id="clockSame" class="ghost">Use theme color</button>
+        <button id="clockApply" disabled>Apply clock color</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <button id="apply" disabled>Apply to phone</button>
+        <button id="restore" class="ghost" disabled>Back to wallpaper colors</button>
+        <button id="read" class="ghost" disabled>Read current</button>
+      </div>
+      <pre id="log"></pre>
+    </section>
+
+    <section class="card faq">
+      <h2>How it works</h2>
+      <p>
+        Android builds its Material You (Monet) palette from a single <i>seed color</i>. Normally that
+        seed comes from your wallpaper, or from a short list of preset "basic colors". The same
+        setting the Wallpaper &amp; style app writes, <code>theme_customization_overlay_packages</code>,
+        accepts any color. This page writes it over ADB, directly from Chrome using WebUSB.
+      </p>
+
+      <h3>What you need</h3>
+      <ol>
+        <li>Chrome or Edge on a computer (WebUSB is not available in Firefox or Safari).</li>
+        <li><b>USB debugging</b> enabled on the phone (Settings → About phone → tap Build number 7×, then Developer options → USB debugging).</li>
+        <li>A USB cable. If you have the Android SDK installed, run <code>adb kill-server</code> first.</li>
+      </ol>
+
+      <h3>FAQ</h3>
+      <details>
+        <summary>Does it need root or an app on the phone?</summary>
+        <p>No. ADB's shell user is allowed to change this setting, so nothing gets installed on the phone.</p>
+      </details>
+      <details>
+        <summary>Which phones work?</summary>
+        <p>Tested on a Pixel 8 Pro running Android 17. Any Pixel or near-stock Android 12+ phone with Material You should work, but other phones haven't been tested.</p>
+      </details>
+      <details>
+        <summary>Will the color stay after I unplug or reboot?</summary>
+        <p>Yes. It's a normal system setting. Picking colors in Wallpaper &amp; style again will replace it; just re-apply here.</p>
+      </details>
+      <details>
+        <summary>Can I set secondary and tertiary colors separately?</summary>
+        <p>Not with this setting: Android derives them from the seed. The style (Vibrant, Expressive, Rainbow…) controls how.</p>
+      </details>
+      <details>
+        <summary>How do I undo it?</summary>
+        <p>Click "Back to wallpaper colors", or pick any color in Wallpaper &amp; style on the phone.</p>
+      </details>
+      <details>
+        <summary>Is my data sent anywhere?</summary>
+        <p>No. Everything runs locally in your browser; the page talks only to your phone over USB.</p>
+      </details>
+    </section>
+
+    <footer class="muted small">
+      Open source on <a href="https://github.com/OK111/pixel-color-picker">GitHub</a>.
+      Not affiliated with Google. Pixel and Android are trademarks of Google LLC.
+    </footer>
+  </main>
+  <script type="module" src="./app.ts"></script>
+</body>
+</html>

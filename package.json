@@ -1,0 +1,21 @@
+{
+  "name": "pixel-color-picker",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  },
+  "dependencies": {
+    "@material/material-color-utilities": "^0.4.0",
+    "@yume-chan/adb": "2.6.4",
+    "@yume-chan/adb-credential-web": "2.1.0",
+    "@yume-chan/adb-daemon-webusb": "2.3.2"
+  },
+  "scripts": {
+    "dev": "bun index.html",
+    "build": "rm -rf dist && bun build index.html --outdir dist --minify && cp public/robots.txt public/sitemap.xml dist/"
+  }
+}
